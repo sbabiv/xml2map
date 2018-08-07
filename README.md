@@ -1,5 +1,5 @@
 # xml2map
-xml to map converter
+xml to map converter written Golang
 
 ### install
 go get -u "github.com/sbabiv/xml2map"
