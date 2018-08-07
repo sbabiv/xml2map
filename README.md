@@ -4,7 +4,7 @@ xml to map converter
 # install
 go get -u "github.com/sbabiv/xml2map"
 
-# Usage
+```go
 
 func main() {
 	data := `<container uid="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
@@ -39,3 +39,5 @@ func main() {
 		fmt.Printf("%v\n", result)
 	}
 }
+
+```
