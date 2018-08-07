@@ -4,6 +4,7 @@ xml to map converter
 # install
 go get -u "github.com/sbabiv/xml2map"
 
+# usage
 ```go
 
 func main() {
