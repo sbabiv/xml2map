@@ -39,6 +39,10 @@ func main() {
 	} else {
 		fmt.Printf("%v\n", result)
 	}
+	
+	v := result["container"].(map[string]interface{})["cats"].(map[string]interface{})["cat"].([]map[string]interface{})[0]["items"].(map[string]interface{})["n"].([]string)[1]
+	
+	fmt.Printf("n[1]: %v\n", v)
 }
 
 ```
