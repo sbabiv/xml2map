@@ -31,8 +31,8 @@ func main() {
 				<city>NY</city>
 			</container>`
 
-	encoder := xml2map.NewDecoder(strings.NewReader(data))
-	result, err := encoder.Decode()
+	decoder := xml2map.NewDecoder(strings.NewReader(data))
+	result, err := decoder.Decode()
 
 	if err != nil {
 		fmt.Printf("%v\n", err)
