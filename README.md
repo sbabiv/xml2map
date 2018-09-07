@@ -1,10 +1,20 @@
 # xml2map
 xml to map converter written Golang
 
-### install
-go get -u "github.com/sbabiv/xml2map"
+## Install
 
-### usage
+``` sh
+go get -u github.com/sbabiv/xml2map
+```
+
+Or, using dep:
+
+``` sh
+dep ensure -add github.com/sbabiv/xml2map
+```
+
+
+## Use
 ```go
 
 func main() {
@@ -51,7 +61,7 @@ func main() {
 
 ```
 
-#### output
+## output
 
 ```go
 map[container:map[@uid:FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6 @lifetime:2019-10-10T18:00:11 cats:map[cat:[map[id:CDA035B6-D453-4A17-B090-84295AE2DEC5 name:moritz age:7 items:map[n:[1293 1255 1257]]] map[id:1634C644-975F-4302-8336-1EF1366EC6A4 name:oliver age:12]] dog:map[@color:gray #text:hello]] color:white city:NY]]
