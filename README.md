@@ -25,7 +25,7 @@ func main() {
 						<name>oliver</name>
 						<age>12</age>
 					</cat>
-					<dog>hello</dog>
+					<dog color="gray">hello</dog>
 				</cats>
 				<color>white</color>
 				<city>NY</city>
