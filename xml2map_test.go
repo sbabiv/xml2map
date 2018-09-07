@@ -7,7 +7,7 @@ import (
 
 func BenchmarkEncode(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		NewEncoder(strings.NewReader(`<container uid="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+		NewDecoder(strings.NewReader(`<container uid="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
 				<cats>
 					<cat>
 						<id>CDA035B6-D453-4A17-B090-84295AE2DEC5</id>
@@ -27,7 +27,27 @@ func BenchmarkEncode(b *testing.B) {
 				</cats>
 				<color>white</color>
 				<city>NY</city>
-			</container>`)).Encode()
+			</container>`)).Decode()
 
+	}
+}
+
+func TestErrDecoder(t *testing.T) {
+	m, err := NewDecoder(strings.NewReader(
+		`<customer id="C1234">
+			  <lname>Smith</lname>
+			  <fname>John&gt;</fname>
+			  <address type="biz">
+				<street>1310 Villa Street</street>
+				<city>Mountain View</city>
+				<state>CA</state>
+				<zip>94041</zip>
+			  </address>
+			<customer>`)).Decode()
+
+	if m == nil && err != nil {
+		t.Logf("result: %v err: %v\n", m, err)
+	} else {
+		t.Errorf("err %v\n", err)
 	}
 }
