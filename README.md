@@ -69,3 +69,14 @@ map[container:map[@uid:FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6 @lifetime:2019-10-10
 result: 1255
 ```
 
+## benchmark
+
+```go
+go test -bench=. -benchmem
+goos: darwin
+goarch: amd64
+pkg: github.com/sbabiv/xml2map
+BenchmarkDecoder-8         50000             29498 ns/op           15096 B/op        267 allocs/op
+PASS
+ok      github.com/sbabiv/xml2map       1.786s
+```
