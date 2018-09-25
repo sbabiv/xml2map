@@ -72,7 +72,6 @@ result: 1255
 ## benchmark
 
 ```go
-go test -bench=. -benchmem
 goos: darwin
 goarch: amd64
 pkg: github.com/sbabiv/xml2map
