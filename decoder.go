@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"io"
 	"strings"
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const (
@@ -73,15 +73,16 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 			}
 
 		case xml.CharData:
-			stack[len(stack)-1].Text = strings.TrimSpace(string(tok))
+			data := strings.TrimSpace(string(tok))
+			if len(stack) > 0 {
+				stack[len(stack)-1].Text = data
+			} else if len(data) > 0 {
+				return nil, errors.New("data at the root level is invalid")
+			}
 
 		case xml.EndElement:
 			{
 				length := len(stack)
-				if length == 1 {
-					return stack[0].Value, nil
-				}
-
 				stack, n = stack[:length-1], stack[length-1]
 
 				if !n.HasMany {
@@ -91,6 +92,10 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					} else {
 						n.Value[n.Label] = n.Text
 					}
+				}
+
+				if len(stack) == 0 {
+					return n.Value, nil
 				}
 
 				if v, ok := n.Parent.Value[n.Parent.Label]; ok {
@@ -124,7 +129,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 		}
 	}
 
-	return nil, errors.New("Invalid document")
+	return nil, errors.New("invalid document")
 }
 
 func getMap(node *node) map[string]interface{} {
