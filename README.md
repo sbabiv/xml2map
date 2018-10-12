@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/sbabiv/xml2map.svg?branch=master)](https://travis-ci.org/sbabiv/xml2map)
+
+
+
 # xml2map
 xml to map converter written Golang
 
