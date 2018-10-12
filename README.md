@@ -82,3 +82,6 @@ ok      github.com/sbabiv/xml2map       1.786s
 
 ## Licence
 [MIT](https://opensource.org/licenses/MIT)
+
+## Author 
+Babiv Sergey
