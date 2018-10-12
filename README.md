@@ -79,3 +79,6 @@ BenchmarkDecoder-8         50000             29498 ns/op           15096 B/op   
 PASS
 ok      github.com/sbabiv/xml2map       1.786s
 ```
+
+## Licence
+[MIT](https://opensource.org/licenses/MIT)
