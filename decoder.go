@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	AttrPrefix = "@"
-	TextPrefix = "#text"
+	attrPrefix = "@"
+	textPrefix = "#text"
 )
 
 type node struct {
@@ -58,9 +58,9 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					m := make(map[string]interface{})
 					for _, attr := range tok.Attr {
 						if len(attr.Name.Space) > 0 {
-							m[AttrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
+							m[attrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
 						} else {
-							m[AttrPrefix+attr.Name.Local] = attr.Value
+							m[attrPrefix+attr.Name.Local] = attr.Value
 						}
 					}
 					n.Value[tok.Name.Local] = m
@@ -88,7 +88,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				if !n.HasMany {
 					if len(n.Attrs) > 0 {
 						m := n.Value[n.Label].(map[string]interface{})
-						m[TextPrefix] = n.Text
+						m[textPrefix] = n.Text
 					} else {
 						n.Value[n.Label] = n.Text
 					}
