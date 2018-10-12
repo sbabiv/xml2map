@@ -1,8 +1,10 @@
 package xml2map
 
 import (
-	"testing"
+	"fmt"
+	"github.com/google/gofuzz"
 	"strings"
+	"testing"
 )
 
 func BenchmarkDecoder(b *testing.B) {
@@ -32,6 +34,41 @@ func BenchmarkDecoder(b *testing.B) {
 	}
 }
 
+func TestStartAttrs(t *testing.T) {
+	tests := []string{
+		`<container ="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+			<color>white</color>
+		</container>`,
+		`<container "FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+			<color>white</color>
+		</container>`,
+		`<container @"FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+			<color>white</color>
+		</container>`,
+	}
+
+	for _, s := range tests {
+		_, err := NewDecoder(strings.NewReader(s)).Decode()
+		if err != nil {
+			t.Fail()
+		}
+	}
+}
+
+func TestFuzz1000(t *testing.T) {
+	f := fuzz.New().NilChance(0).NumElements(1, 1000)
+	var myMap map[string]int
+	f.Fuzz(&myMap)
+
+	for v := range myMap {
+		m, err := NewDecoder(strings.NewReader(v)).Decode()
+		if err == nil {
+			fmt.Printf("m: %v", m)
+
+		}
+	}
+}
+
 func TestErrDecoder(t *testing.T) {
 	m, err := NewDecoder(strings.NewReader(
 		`<customer id="C1234">
@@ -49,6 +86,13 @@ func TestErrDecoder(t *testing.T) {
 		t.Logf("result: %v err: %v\n", m, err)
 	} else {
 		t.Errorf("err %v\n", err)
+	}
+}
+
+func TestEmpty(t *testing.T) {
+	m, err := NewDecoder(strings.NewReader(" ")).Decode()
+	if err != nil || len(m) > 0 {
+		t.Fail()
 	}
 }
 
