@@ -12,6 +12,14 @@ const (
 	textPrefix = "#text"
 )
 
+var (
+	//invalid document err
+	InvalidDocument = errors.New("invalid document")
+
+	//data at the root level is invalid err
+	InvalidRoot = errors.New("data at the root level is invalid")
+)
+
 type node struct {
 	Parent *node
 	Value map[string]interface{}
@@ -77,7 +85,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 			if len(stack) > 0 {
 				stack[len(stack)-1].Text = data
 			} else if len(data) > 0 {
-				return nil, errors.New("data at the root level is invalid")
+				return nil, InvalidRoot
 			}
 
 		case xml.EndElement:
@@ -129,7 +137,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 		}
 	}
 
-	return nil, errors.New("invalid document")
+	return nil, InvalidDocument
 }
 
 func getMap(node *node) map[string]interface{} {

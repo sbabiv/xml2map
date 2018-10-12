@@ -39,17 +39,17 @@ func TestStartAttrs(t *testing.T) {
 		`<container ="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
 			<color>white</color>
 		</container>`,
-		`<container "FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+		`<container i=d="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
 			<color>white</color>
 		</container>`,
-		`<container @"FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
-			<color>white</color>
+		`<container id="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+			<color id=>white</color>
 		</container>`,
 	}
 
 	for _, s := range tests {
 		_, err := NewDecoder(strings.NewReader(s)).Decode()
-		if err != nil {
+		if err == nil {
 			t.Fail()
 		}
 	}
@@ -90,9 +90,13 @@ func TestErrDecoder(t *testing.T) {
 }
 
 func TestEmpty(t *testing.T) {
-	m, err := NewDecoder(strings.NewReader(" ")).Decode()
-	if err != nil || len(m) > 0 {
-		t.Fail()
+	tests := []string{"", " ", "  ", ``, ` `, "\n"}
+
+	for _, s := range tests {
+		_, err := NewDecoder(strings.NewReader(s)).Decode()
+		if err != InvalidDocument {
+			t.Fail()
+		}
 	}
 }
 
