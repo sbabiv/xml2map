@@ -100,7 +100,6 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				}
 
 				setNodeValue(n)
-
 				n = n.Parent
 			}
 		}
