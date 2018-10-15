@@ -2,33 +2,44 @@ package xml2map
 
 import (
 	"encoding/xml"
+	"errors"
 	"io"
 	"strings"
-	"errors"
 )
 
 const (
-	AttrPrefix = "@"
-	TextPrefix = "#text"
+	attrPrefix = "@"
+	textPrefix = "#text"
+)
+
+var (
+	//InvalidDocument invalid document err
+	InvalidDocument = errors.New("invalid document")
+
+	//InvalidRoot data at the root level is invalid err
+	InvalidRoot = errors.New("data at the root level is invalid")
 )
 
 type node struct {
-	Parent *node
-	Value map[string]interface{}
-	Attrs []xml.Attr
-	Label string
-	Text string
+	Parent  *node
+	Value   map[string]interface{}
+	Attrs   []xml.Attr
+	Label   string
+	Text    string
 	HasMany bool
 }
 
+// Decoder decoder instance
 type Decoder struct {
 	r io.Reader
 }
 
+// NewDecoder new decoder instance
 func NewDecoder(reader io.Reader) *Decoder {
 	return &Decoder{r: reader}
 }
 
+//Decode decode xml string to map[string]interface{}
 func (d *Decoder) Decode() (map[string]interface{}, error) {
 	decoder := xml.NewDecoder(d.r)
 	n := &node{}
@@ -50,7 +61,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				n = &node{
 					Label:  tok.Name.Local,
 					Parent: n,
-					Value:  map[string]interface{}{tok.Name.Local:map[string]interface{}{}},
+					Value:  map[string]interface{}{tok.Name.Local: map[string]interface{}{}},
 					Attrs:  tok.Attr,
 				}
 
@@ -58,9 +69,9 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					m := make(map[string]interface{})
 					for _, attr := range tok.Attr {
 						if len(attr.Name.Space) > 0 {
-							m[AttrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
+							m[attrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
 						} else {
-							m[AttrPrefix+attr.Name.Local] = attr.Value
+							m[attrPrefix+attr.Name.Local] = attr.Value
 						}
 					}
 					n.Value[tok.Name.Local] = m
@@ -77,7 +88,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 			if len(stack) > 0 {
 				stack[len(stack)-1].Text = data
 			} else if len(data) > 0 {
-				return nil, errors.New("data at the root level is invalid")
+				return nil, InvalidRoot
 			}
 
 		case xml.EndElement:
@@ -88,7 +99,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				if !n.HasMany {
 					if len(n.Attrs) > 0 {
 						m := n.Value[n.Label].(map[string]interface{})
-						m[TextPrefix] = n.Text
+						m[textPrefix] = n.Text
 					} else {
 						n.Value[n.Label] = n.Text
 					}
@@ -129,7 +140,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 		}
 	}
 
-	return nil, errors.New("invalid document")
+	return nil, InvalidDocument
 }
 
 func getMap(node *node) map[string]interface{} {
