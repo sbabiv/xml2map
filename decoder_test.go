@@ -94,7 +94,7 @@ func TestEmpty(t *testing.T) {
 
 	for _, s := range tests {
 		_, err := NewDecoder(strings.NewReader(s)).Decode()
-		if err != InvalidDocument {
+		if err != ErrInvalidDocument {
 			t.Fail()
 		}
 	}

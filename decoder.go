@@ -13,11 +13,11 @@ const (
 )
 
 var (
-	//InvalidDocument invalid document err
-	InvalidDocument = errors.New("invalid document")
+	//ErrInvalidDocument invalid document err
+	ErrInvalidDocument = errors.New("invalid document")
 
-	//InvalidRoot data at the root level is invalid err
-	InvalidRoot = errors.New("data at the root level is invalid")
+	//ErrInvalidRoot data at the root level is invalid err
+	ErrInvalidRoot = errors.New("data at the root level is invalid")
 )
 
 type node struct {
@@ -65,17 +65,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					Attrs:  tok.Attr,
 				}
 
-				if len(tok.Attr) > 0 {
-					m := make(map[string]interface{})
-					for _, attr := range tok.Attr {
-						if len(attr.Name.Space) > 0 {
-							m[attrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
-						} else {
-							m[attrPrefix+attr.Name.Local] = attr.Value
-						}
-					}
-					n.Value[tok.Name.Local] = m
-				}
+				setAttrs(n, &tok)
 				stack = append(stack, n)
 
 				if n.Parent != nil {
@@ -88,7 +78,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 			if len(stack) > 0 {
 				stack[len(stack)-1].Text = data
 			} else if len(data) > 0 {
-				return nil, InvalidRoot
+				return nil, ErrInvalidRoot
 			}
 
 		case xml.EndElement:
@@ -109,38 +99,57 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					return n.Value, nil
 				}
 
-				if v, ok := n.Parent.Value[n.Parent.Label]; ok {
-					m := v.(map[string]interface{})
-					if v, ok = m[n.Label]; ok {
-						switch item := v.(type) {
-						case string:
-							m[n.Label] = []string{item, n.Value[n.Label].(string)}
-						case []string:
-							m[n.Label] = append(item, n.Value[n.Label].(string))
-						case map[string]interface{}:
-							vm := getMap(n)
-							if vm != nil {
-								m[n.Label] = []map[string]interface{}{item, vm}
-							}
-						case []map[string]interface{}:
-							vm := getMap(n)
-							if vm != nil {
-								m[n.Label] = append(item, vm)
-							}
-						}
-					} else {
-						m[n.Label] = n.Value[n.Label]
-					}
+				setNodeValue(n)
 
-				} else {
-					n.Parent.Value[n.Parent.Label] = n.Value[n.Label]
-				}
 				n = n.Parent
 			}
 		}
 	}
 
-	return nil, InvalidDocument
+	return nil, ErrInvalidDocument
+}
+
+func setAttrs(n *node, tok *xml.StartElement) {
+	if len(tok.Attr) > 0 {
+		m := make(map[string]interface{})
+		for _, attr := range tok.Attr {
+			if len(attr.Name.Space) > 0 {
+				m[attrPrefix+attr.Name.Space+":"+attr.Name.Local] = attr.Value
+			} else {
+				m[attrPrefix+attr.Name.Local] = attr.Value
+			}
+		}
+		n.Value[tok.Name.Local] = m
+	}
+}
+
+func setNodeValue(n *node) {
+	if v, ok := n.Parent.Value[n.Parent.Label]; ok {
+		m := v.(map[string]interface{})
+		if v, ok = m[n.Label]; ok {
+			switch item := v.(type) {
+			case string:
+				m[n.Label] = []string{item, n.Value[n.Label].(string)}
+			case []string:
+				m[n.Label] = append(item, n.Value[n.Label].(string))
+			case map[string]interface{}:
+				vm := getMap(n)
+				if vm != nil {
+					m[n.Label] = []map[string]interface{}{item, vm}
+				}
+			case []map[string]interface{}:
+				vm := getMap(n)
+				if vm != nil {
+					m[n.Label] = append(item, vm)
+				}
+			}
+		} else {
+			m[n.Label] = n.Value[n.Label]
+		}
+
+	} else {
+		n.Parent.Value[n.Parent.Label] = n.Value[n.Label]
+	}
 }
 
 func getMap(node *node) map[string]interface{} {
