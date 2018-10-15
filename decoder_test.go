@@ -114,7 +114,7 @@ func TestSpaces(t *testing.T) {
 	}
 }
 
-func TestInvalidStartIndex(t *testing.T)  {
+func TestInvalidStartIndex(t *testing.T) {
 	_, err := NewDecoder(strings.NewReader(`d<note>
 				  data
 				</note>`)).Decode()

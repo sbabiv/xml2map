@@ -2,9 +2,9 @@ package xml2map
 
 import (
 	"encoding/xml"
+	"errors"
 	"io"
 	"strings"
-	"errors"
 )
 
 const (
@@ -13,30 +13,33 @@ const (
 )
 
 var (
-	//invalid document err
+	//InvalidDocument invalid document err
 	InvalidDocument = errors.New("invalid document")
 
-	//data at the root level is invalid err
+	//InvalidRoot data at the root level is invalid err
 	InvalidRoot = errors.New("data at the root level is invalid")
 )
 
 type node struct {
-	Parent *node
-	Value map[string]interface{}
-	Attrs []xml.Attr
-	Label string
-	Text string
+	Parent  *node
+	Value   map[string]interface{}
+	Attrs   []xml.Attr
+	Label   string
+	Text    string
 	HasMany bool
 }
 
+// Decoder decoder instance
 type Decoder struct {
 	r io.Reader
 }
 
+// NewDecoder new decoder instance
 func NewDecoder(reader io.Reader) *Decoder {
 	return &Decoder{r: reader}
 }
 
+//Decode decode xml string to map[string]interface{}
 func (d *Decoder) Decode() (map[string]interface{}, error) {
 	decoder := xml.NewDecoder(d.r)
 	n := &node{}
@@ -58,7 +61,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				n = &node{
 					Label:  tok.Name.Local,
 					Parent: n,
-					Value:  map[string]interface{}{tok.Name.Local:map[string]interface{}{}},
+					Value:  map[string]interface{}{tok.Name.Local: map[string]interface{}{}},
 					Attrs:  tok.Attr,
 				}
 
