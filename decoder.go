@@ -13,11 +13,11 @@ const (
 )
 
 var (
-	//InvalidDocument invalid document err
-	InvalidDocument = errors.New("invalid document")
+	//ErrInvalidDocument invalid document err
+	ErrInvalidDocument = errors.New("invalid document")
 
-	//InvalidRoot data at the root level is invalid err
-	InvalidRoot = errors.New("data at the root level is invalid")
+	//ErrInvalidRoot data at the root level is invalid err
+	ErrInvalidRoot = errors.New("data at the root level is invalid")
 )
 
 type node struct {
