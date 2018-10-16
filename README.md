@@ -80,14 +80,17 @@ result: 1255
 
 ## Benchmark
 
+
 ```go
+$ go test -bench=. -benchmem
 goos: darwin
 goarch: amd64
 pkg: github.com/sbabiv/xml2map
-BenchmarkDecoder-8         50000             29498 ns/op           15096 B/op        267 allocs/op
+BenchmarkDecoder-8         50000             29773 ns/op           15032 B/op        261 allocs/op
 PASS
-ok      github.com/sbabiv/xml2map       1.786s
+ok      github.com/sbabiv/xml2map       1.805s
 ```
+
 
 ## Test
 
