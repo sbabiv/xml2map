@@ -5,7 +5,7 @@
 
 
 # xml2map
-xml to map converter written Golang
+XML to MAP converter written Golang
 
 Sometimes there is a need for the representation of previously unknown structures. Such a universal representation is usually a string in the form of JSON, XML, or the structure of data map. similar to the map[string]interface{} or map[interface{}]interface{}.
 
