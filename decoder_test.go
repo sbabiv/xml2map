@@ -63,12 +63,10 @@ func TestPars(t *testing.T) {
 					<n id="20">2</n>
 					<n id="30">3</n>
 				</items>
-			<customer>`)).Decode()
+			</customer>`)).Decode()
 
-	if m == nil && err != nil {
-		t.Logf("result: %v err: %v\n", m, err)
-	} else {
-		t.Errorf("err %v\n", err)
+	if err != nil {
+		t.Errorf("m: %v, err: %v\n", m, err)
 	}
 }
 

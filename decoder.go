@@ -29,17 +29,17 @@ type node struct {
 	HasMany bool
 }
 
-// Decoder decoder instance
+// Decoder instance
 type Decoder struct {
 	r io.Reader
 }
 
-// NewDecoder new decoder instance
+// NewDecoder create new decoder instance
 func NewDecoder(reader io.Reader) *Decoder {
 	return &Decoder{r: reader}
 }
 
-//Decode decode xml string to map[string]interface{}
+//Decode xml string to map[string]interface{}
 func (d *Decoder) Decode() (map[string]interface{}, error) {
 	decoder := xml.NewDecoder(d.r)
 	n := &node{}
