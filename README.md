@@ -7,7 +7,9 @@
 # xml2map
 xml to map converter written Golang
 
-## Install
+## Getting started
+
+#### 1. install
 
 ``` sh
 go get -u github.com/sbabiv/xml2map
@@ -20,7 +22,8 @@ dep ensure -add github.com/sbabiv/xml2map
 ```
 
 
-## Use
+#### 2. use it
+
 ```go
 
 func main() {
@@ -84,6 +87,32 @@ pkg: github.com/sbabiv/xml2map
 BenchmarkDecoder-8         50000             29498 ns/op           15096 B/op        267 allocs/op
 PASS
 ok      github.com/sbabiv/xml2map       1.786s
+```
+
+## test
+
+```go
+$ go test -cover -v .
+=== RUN   TestStartAttrs
+--- PASS: TestStartAttrs (0.00s)
+=== RUN   TestPars
+--- PASS: TestPars (0.00s)
+=== RUN   TestFuzz1000
+--- PASS: TestFuzz1000 (0.00s)
+=== RUN   TestErrDecoder
+--- PASS: TestErrDecoder (0.00s)
+    decoder_test.go:101: result: map[] err: XML syntax error on line 10: unexpected EOF
+=== RUN   TestEmpty
+--- PASS: TestEmpty (0.00s)
+=== RUN   TestSpaces
+--- PASS: TestSpaces (0.00s)
+=== RUN   TestInvalidStartIndex
+--- PASS: TestInvalidStartIndex (0.00s)
+=== RUN   TestDecode
+--- PASS: TestDecode (0.00s)
+PASS
+coverage: 93.4% of statements
+ok      github.com/sbabiv/xml2map       (cached)        coverage: 93.4% of statements
 ```
 
 ## Licence
