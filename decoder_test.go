@@ -55,9 +55,18 @@ func TestStartAttrs(t *testing.T) {
 	}
 }
 
+func TestNs(t *testing.T) {
+	m, err := NewDecoder(strings.NewReader(
+		`<container xmlns:h="http://www.w3.org/TR/html4/"
+ 						xmlns:xsl="http://www.w3.org/1999/XSL/Transform"></container>`)).Decode()
+	if err != nil {
+		t.Errorf("m: %v, err: %v\n", m, err)
+	}
+}
+
 func TestPars(t *testing.T) {
 	m, err := NewDecoder(strings.NewReader(
-		`<customer id="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+		`<customer  id="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
 				<items id="100" count="3">
 					<n id="10">1</n>
 					<n id="20">2</n>
