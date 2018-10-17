@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/sbabiv/xml2map.svg?branch=master)](https://travis-ci.org/sbabiv/xml2map)
-[![cover.run](https://cover.run/go/github.com/sbabiv/xml2map.svg?style=flat&tag=golang-1.10)](https://cover.run/go?tag=golang-1.10&repo=github.com%2Fsbabiv%2Fxml2map)
+[![Coverage Status](https://coveralls.io/repos/github/sbabiv/xml2map/badge.svg?branch=master)](https://coveralls.io/github/sbabiv/xml2map?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sbabiv/xml2map)](https://goreportcard.com/report/github.com/sbabiv/xml2map)
 [![GoDoc](https://godoc.org/github.com/sbabiv/xml2map?status.svg)](https://godoc.org/github.com/sbabiv/xml2map)
 
