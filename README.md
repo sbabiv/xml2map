@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/sbabiv/xml2map/badge.svg?branch=master)](https://coveralls.io/github/sbabiv/xml2map?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sbabiv/xml2map)](https://goreportcard.com/report/github.com/sbabiv/xml2map)
 [![GoDoc](https://godoc.org/github.com/sbabiv/xml2map?status.svg)](https://godoc.org/github.com/sbabiv/xml2map)
-
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go#xml)
 
 # xml2map
 XML to MAP converter written Golang
