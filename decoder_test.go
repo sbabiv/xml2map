@@ -213,6 +213,8 @@ func TestDecode(t *testing.T) {
 }
 
 func TestDecodeWithCustomPrefixes(t *testing.T) {
+	attrPrefix := "~"
+	textPrefix := "$"
 	m, err := NewDecoderWithCustomPrefixes(strings.NewReader(
 		`<container uid="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
 				<cats>
@@ -240,7 +242,7 @@ func TestDecodeWithCustomPrefixes(t *testing.T) {
 				</cats>
 				<color>white</color>
 				<city>NY</city>
-			</container>`), "~", "$").Decode()
+			</container>`), &attrPrefix, &textPrefix).Decode()
 
 	if err != nil {
 		t.Errorf("err: %v", err)

@@ -32,8 +32,8 @@ type node struct {
 // Decoder instance
 type Decoder struct {
 	r 			io.Reader
-	attrPrefix	string
-	textPrefix	string
+	attrPrefix	*string
+	textPrefix	*string
 }
 
 // NewDecoder create new decoder instance
@@ -41,7 +41,7 @@ func NewDecoder(reader io.Reader) *Decoder {
 	return &Decoder{r: reader}
 }
 
-func NewDecoderWithCustomPrefixes(reader io.Reader, attrPrefix, textPrefix string) *Decoder {
+func NewDecoderWithCustomPrefixes(reader io.Reader, attrPrefix, textPrefix *string) *Decoder {
 	return &Decoder{r: reader, attrPrefix: attrPrefix, textPrefix: textPrefix}
 }
 
@@ -51,15 +51,15 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 	n := &node{}
 	stack := make([]*node, 0)
 
-	attrPrefix := d.attrPrefix
-	textPrefix := d.textPrefix
+	attrPrefix := defaultAttrPrefix
+	textPrefix := defaultTextPrefix
 
-	if attrPrefix == "" {
-		attrPrefix = defaultAttrPrefix
+	if d.attrPrefix != nil {
+		attrPrefix = *d.attrPrefix
 	}
 
-	if textPrefix == "" {
-		textPrefix = defaultTextPrefix
+	if d.textPrefix != nil {
+		textPrefix = *d.textPrefix
 	}
 
 	for {
