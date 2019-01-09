@@ -31,12 +31,19 @@ type node struct {
 
 // Decoder instance
 type Decoder struct {
-	r io.Reader
+	r          io.Reader
+	attrPrefix string
+	textPrefix string
 }
 
 // NewDecoder create new decoder instance
 func NewDecoder(reader io.Reader) *Decoder {
-	return &Decoder{r: reader}
+	return NewDecoderWithPrefix(reader, attrPrefix, textPrefix)
+}
+
+// NewDecoder create new decoder instance with custom attribute prefix and text prefix
+func NewDecoderWithPrefix(reader io.Reader, attrPrefix, textPrefix string) *Decoder {
+	return &Decoder{r: reader, attrPrefix: attrPrefix, textPrefix: textPrefix}
 }
 
 //Decode xml string to map[string]interface{}
@@ -65,7 +72,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 					Attrs:  tok.Attr,
 				}
 
-				setAttrs(n, &tok)
+				setAttrs(n, &tok, d.attrPrefix)
 				stack = append(stack, n)
 
 				if n.Parent != nil {
@@ -89,7 +96,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 				if !n.HasMany {
 					if len(n.Attrs) > 0 {
 						m := n.Value[n.Label].(map[string]interface{})
-						m[textPrefix] = n.Text
+						m[d.textPrefix] = n.Text
 					} else {
 						n.Value[n.Label] = n.Text
 					}
@@ -108,7 +115,7 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 	return nil, ErrInvalidDocument
 }
 
-func setAttrs(n *node, tok *xml.StartElement) {
+func setAttrs(n *node, tok *xml.StartElement, attrPrefix string) {
 	if len(tok.Attr) > 0 {
 		m := make(map[string]interface{})
 		for _, attr := range tok.Attr {
