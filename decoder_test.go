@@ -211,3 +211,38 @@ func TestDecode(t *testing.T) {
 		}
 	}
 }
+
+func TestWithPrefix(t *testing.T) {
+	m, err := NewDecoderWithPrefix(strings.NewReader(
+		`<customer  id="FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" lifetime="2019-10-10T18:00:11">
+				<items id="100" count="3">
+					<n id="10">1</n>
+					<n id="20">2</n>
+					<n id="30">3</n>
+				</items>
+			</customer>`), "$", "#").Decode()
+
+	if err != nil {
+		t.Errorf("m: %v, err: %v\n", m, err)
+	}
+
+	customer := m["customer"].(map[string]interface{})
+	if customer["$id"] !=  "FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" && customer["$lifetime"] != "2019-10-10T18:00:11" {
+		t.Errorf("customer tag attr not found")
+	} else {
+		items := customer["items"].(map[string]interface{})
+		if items["$id"] != "100" || items["$count"] != "3" {
+			t.Errorf("items tag attr not found")
+		} else {
+			list := items["n"].([]map[string]interface{})
+			if len(list) != 3 {
+				t.Errorf("list len %v", len(items))
+			} else {
+				if list[1]["$id"] != "20" && list[1]["%"] != "2" {
+					t.Errorf("invalid parse n element attr or text")
+				}
+			}
+		}
+	}
+}
+
