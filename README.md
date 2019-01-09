@@ -75,6 +75,12 @@ func main() {
 }
 
 ```
+if you want to use your custom prefixes use the 
+
+```
+NewDecoderWithPrefix(reader io.Reader, attrPrefix, textPrefix string) *Decoder
+```
+
 
 ## Output
 
