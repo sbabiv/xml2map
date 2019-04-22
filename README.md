@@ -15,7 +15,7 @@ For example, the map[string]interface{} can be used as a universal type in templ
 
 ## Getting started
 
-#### 1. install
+#### 1. install (go.mod)
 
 ``` sh
 go get -u github.com/sbabiv/xml2map
