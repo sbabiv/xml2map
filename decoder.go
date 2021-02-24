@@ -41,7 +41,7 @@ func NewDecoder(reader io.Reader) *Decoder {
 	return NewDecoderWithPrefix(reader, attrPrefix, textPrefix)
 }
 
-// NewDecoder create new decoder instance with custom attribute prefix and text prefix
+// NewDecoderWithPrefix create new decoder instance with custom attribute prefix and text prefix
 func NewDecoderWithPrefix(reader io.Reader, attrPrefix, textPrefix string) *Decoder {
 	return &Decoder{r: reader, attrPrefix: attrPrefix, textPrefix: textPrefix}
 }

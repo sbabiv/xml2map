@@ -227,7 +227,7 @@ func TestWithPrefix(t *testing.T) {
 	}
 
 	customer := m["customer"].(map[string]interface{})
-	if customer["$id"] !=  "FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" && customer["$lifetime"] != "2019-10-10T18:00:11" {
+	if customer["$id"] != "FA6666D9-EC9F-4DA3-9C3D-4B2460A4E1F6" && customer["$lifetime"] != "2019-10-10T18:00:11" {
 		t.Errorf("customer tag attr not found")
 	} else {
 		items := customer["items"].(map[string]interface{})
@@ -245,4 +245,3 @@ func TestWithPrefix(t *testing.T) {
 		}
 	}
 }
-
