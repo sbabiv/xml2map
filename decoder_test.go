@@ -245,3 +245,33 @@ func TestWithPrefix(t *testing.T) {
 		}
 	}
 }
+
+func TestWithNameSpace(t *testing.T) {
+	m, err := NewDecoder(strings.NewReader(
+		`<?xml version="1.0" encoding="utf-8"?>
+		<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+			<channel>
+				<title>example.com RSS</title>
+				<link>https://www.example.com/</link>
+				<description>A cool website</description>
+				<atom:link href="http://www.example.com/rss.xml" rel="self" type="application/rss+xml" />
+				<atom:title>Atom Title</atom:title>
+				<item>
+					<title>Cool Article</title>
+					<link>https://www.example.com/cool-article</link>
+					<guid>https://www.example.com/cool-article</guid>
+					<pubDate>Sun, 10 Dec 2017 05:00:00 GMT</pubDate>
+					<description>My cool article description</description>
+				</item>
+			</channel>
+		</rss>`)).Decode()
+
+	if err != nil {
+		t.Errorf("m: %v, err: %v\n", m, err)
+	}
+
+	rss := m["rss"].(map[string]interface{})["channel"].(map[string]interface{})
+	if rss["atom:title"] != "Atom Title" {
+		t.Errorf("invalid value for namespace node")
+	}
+}
