@@ -3,7 +3,9 @@ package xml2map
 import (
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
+	"path"
 	"strings"
 )
 
@@ -25,6 +27,7 @@ type node struct {
 	Value   map[string]interface{}
 	Attrs   []xml.Attr
 	Label   string
+	Space   string
 	Text    string
 	HasMany bool
 }
@@ -65,10 +68,15 @@ func (d *Decoder) Decode() (map[string]interface{}, error) {
 		switch tok := token.(type) {
 		case xml.StartElement:
 			{
+				label := tok.Name.Local
+				if tok.Name.Space != "" {
+					label = fmt.Sprintf("%s:%s", strings.ToLower(path.Base(tok.Name.Space)), tok.Name.Local)
+				}
 				n = &node{
-					Label:  tok.Name.Local,
+					Label:  label,
+					Space:  tok.Name.Space,
 					Parent: n,
-					Value:  map[string]interface{}{tok.Name.Local: map[string]interface{}{}},
+					Value:  map[string]interface{}{label: map[string]interface{}{}},
 					Attrs:  tok.Attr,
 				}
 
